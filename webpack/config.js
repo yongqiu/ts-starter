@@ -1,14 +1,16 @@
-const webpack =require('webpack');
 const path = require('path'); // 调用路径
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');  // 引入打包html的插件
-
 
 module.exports = ({ env }) => {
   const devMode = env === "development";
   return {
     mode: 'production',
     entry: {
-      app: devMode ? ['webpack-hot-middleware/client?reload=true&quiet=true', './src/app.ts'] : ['./src/app.ts'],
+      app: devMode ? [
+        'webpack-hot-middleware/client?reload=true&quiet=true', './src/app.ts'
+      ] :
+        ['./src/app.ts'],
     },
     devtool: devMode ? 'eval-cheap-module-source-map' : false,
     devServer: {
@@ -34,6 +36,10 @@ module.exports = ({ env }) => {
             loader: "ts-loader",
           },
           exclude: /node_modules/,
+        },
+        {
+          test: /\.glsl$/,
+          loader: 'raw-loader'
         }
       ]
     },
@@ -41,14 +47,16 @@ module.exports = ({ env }) => {
       filename: '[name].[contenthash:10].js',
       path: path.resolve(__dirname, '../dist'),
       clean: true,
+      // 增加这个配置
+      // publicPath: '/',
     },
     plugins: [
-      devMode && new webpack.HotModuleReplacementPlugin(),
       // html 
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, '../public/index.html'), // 文件模板
         chunks: ['app']
       }),
+      devMode && new webpack.HotModuleReplacementPlugin(),
     ]
   };
 };

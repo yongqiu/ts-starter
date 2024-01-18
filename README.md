@@ -1,5 +1,5 @@
 # ts-starter
-webpack+typescript+express starter
+webpack5+typescript+express+hmr starter
 
 ## install
 npm install
